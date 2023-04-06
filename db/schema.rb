@@ -10,7 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_04_06_152229) do
+ActiveRecord::Schema.define(version: 2023_04_06_160126) do
+
+  create_table "sleep_logs", force: :cascade do |t|
+    t.integer "user_id"
+    t.float "sleep_time"
+    t.datetime "wakeup_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at", "user_id"], name: "index_sleep_logs_on_created_at_and_user_id", unique: true
+    t.index ["user_id"], name: "index_sleep_logs_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
