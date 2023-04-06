@@ -18,4 +18,21 @@ class User < ApplicationRecord
   # Allow a User to follow/unfollow another User
   #   - Create api for user lists
   # Allow to see sleep record over past week, ordered by length of sleep
+  #
+
+  # Fetch in-progress log
+  #
+  # @return [SleepLog]
+  def open_log
+    sleep_logs.where(wakeup_at: nil).last
+  end
+
+  # Initialize / End Sleep Session
+  #
+  # @return [Void]
+  def log_sleep!
+    return open_log.end_session! if open_log
+
+    sleep_logs.new_session!
+  end
 end
