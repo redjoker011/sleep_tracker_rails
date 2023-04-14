@@ -1,24 +1,69 @@
-# README
+# Sleep Tracker App
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+# Pre-requisites
 
-Things you may want to cover:
+- Ruby 2.7.6
+- Rails 5.2.8.1
+- SQLite3
 
-* Ruby version
+# Installation
 
-* System dependencies
+## ruby & bundle
+    ```
+      > ruby -v
+      ruby 2.7.6p219
 
-* Configuration
+      > bundle install
 
-* Database creation
+      > rails s -p 3000 -b 0.0.0.0
+    ```
 
-* Database initialization
+## database
+    ```
+      # copy database.yml.example as database.yml
+      > cp config/database.yml.example config/database.yml
 
-* How to run the test suite
+      > rails db:create
+      > rails db:migrate
+      > rails db:seed
+    ```
 
-* Services (job queues, cache servers, search engines, etc.)
+## API
 
-* Deployment instructions
+### Endpoints
 
-* ...
+#### GET /api/v1/users
+##### Description
+Fetch Users
+
+#### GET /api/v1/users/:id/followed-users/:followed_user_id/sleep_sessions
+##### Description
+View Followed User's sleep logs
+##### Parameters
+- id -> User ID
+- followed_user_id -> ID of followed User that you want to view sleep logs
+
+#### GET /api/v1/users/:id/followed-users
+##### Description
+Fetch Followed Users
+##### Parameters
+- id -> User ID
+
+#### POST /api/v1/users/follow-user
+##### Description
+Follow a User
+##### Parameters
+- id -> User ID
+- followed_user_id -> ID of the User that you want to follow
+
+#### POST /api/v1/users/log-session
+##### Description
+Log sleep session
+##### Parameters
+- id -> User ID
+
+### Responses
+  - 200 -> Success Request
+  - 400 -> Validation Error e.g User already followed
+  - 404 -> User or Followed User not found
+
