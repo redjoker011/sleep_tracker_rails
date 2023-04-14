@@ -12,6 +12,8 @@ require 'test_helper'
 class UserTest < ActiveSupport::TestCase
   context 'associations' do
     should have_many(:sleep_logs)
+    should have_many(:followers)
+    should have_many(:followings)
   end
 
   context 'validations' do
