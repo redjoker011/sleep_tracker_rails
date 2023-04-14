@@ -31,6 +31,24 @@ module Api
         render json: sleep_logs
       end
 
+      # View Followed User's sleep sessions
+      # POST /api/v1/:id/sleep-sessions
+      def sleep_sessions
+        user = User.find(params[:id])
+
+        return response_not_found unless user
+
+        followed_user = User.find(params[:followed_user_id])
+
+        return response_not_found unless followed_user || !user.follow?(followed_user)
+
+        sleep_logs = followed_user
+                     .sleep_logs
+                     .order_by_sleep
+                     .map { |log| format_sleep_log(log) }
+        render json: sleep_logs
+      end
+
       private
 
       # Return 404 status
