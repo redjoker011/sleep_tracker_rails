@@ -14,8 +14,18 @@ module Api
         render json: users
       end
 
+      # Fetch Followed Users
+      # GET /api/v1/users/:id/followed-users
+      def followed_users
+        user = User.find(params[:id])
+
+        return response_not_found unless user
+
+        render json: user.followings
+      end
+
       # Log sleep and wake up time
-      # POST /api/v1/:id/log-session
+      # POST /api/v1/users/log-session
       def log_session
         user = User.find(params[:id])
 
@@ -32,7 +42,7 @@ module Api
       end
 
       # View Followed User's sleep sessions
-      # POST /api/v1/:id/sleep-sessions
+      # POST /api/v1/users/:id/followed-users/:followed_user_id/sleep-sessions
       def sleep_sessions
         user = User.find(params[:id])
 
@@ -47,6 +57,24 @@ module Api
                      .order_by_sleep
                      .map { |log| format_sleep_log(log) }
         render json: sleep_logs
+      end
+
+      # Follow a User
+      # POST /api/v1/users/follow-user
+      def follow_user
+        user = User.find(params[:id])
+
+        return response_not_found unless user
+
+        followed_user = User.find(params[:followed_user_id])
+
+        return response_not_found unless followed_user
+
+        user.follow!(followed_user)
+
+        render json: user.followings
+      rescue ActiveRecord::RecordInvalid
+        render json: { error: 'User already being followed'.to_json }, status: 404
       end
 
       private
