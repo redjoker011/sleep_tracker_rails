@@ -6,6 +6,9 @@ module Api
   module V1
     # User API Controller
     class UsersController < ActionController::API
+      before_action :initialize_user, except: :index
+      before_action :initialize_followed_user, only: %i[follow_user sleep_sessions]
+
       # Fetch Users
       # GET /api/v1/users
       def index
@@ -17,24 +20,16 @@ module Api
       # Fetch Followed Users
       # GET /api/v1/users/:id/followed-users
       def followed_users
-        user = User.find(params[:id])
-
-        return response_not_found unless user
-
-        render json: user.followings
+        render json: @user.followings
       end
 
       # Log sleep and wake up time
       # POST /api/v1/users/log-session
       def log_session
-        user = User.find(params[:id])
-
-        return response_not_found unless user
-
         # Log Sleep session
-        user.log_sleep!
+        @user.log_sleep!
 
-        sleep_logs = user
+        sleep_logs = @user
                      .sleep_logs
                      .order_by_created_at
                      .map { |log| format_sleep_log(log) }
@@ -44,15 +39,9 @@ module Api
       # View Followed User's sleep sessions
       # POST /api/v1/users/:id/followed-users/:followed_user_id/sleep-sessions
       def sleep_sessions
-        user = User.find(params[:id])
+        return response_not_found unless @user.followed?(@followed_user)
 
-        return response_not_found unless user
-
-        followed_user = User.find(params[:followed_user_id])
-
-        return response_not_found unless followed_user || !user.follow?(followed_user)
-
-        sleep_logs = followed_user
+        sleep_logs = @followed_user
                      .sleep_logs
                      .order_by_sleep
                      .map { |log| format_sleep_log(log) }
@@ -62,19 +51,11 @@ module Api
       # Follow a User
       # POST /api/v1/users/follow-user
       def follow_user
-        user = User.find(params[:id])
+        @user.follow!(@followed_user)
 
-        return response_not_found unless user
-
-        followed_user = User.find(params[:followed_user_id])
-
-        return response_not_found unless followed_user
-
-        user.follow!(followed_user)
-
-        render json: user.followings
+        render json: @user.followings
       rescue ActiveRecord::RecordInvalid
-        render json: { error: 'User already being followed'.to_json }, status: 404
+        render json: { error: 'User already being followed'.to_json }, status: 400
       end
 
       private
@@ -91,6 +72,18 @@ module Api
           ended_at: log.normalized_wakeup_time,
           sleep_time_in_hour: log.sleep_time
         }
+      end
+
+      def initialize_user
+        @user = User.find_by_id(params[:id])
+
+        return response_not_found unless @user
+      end
+
+      def initialize_followed_user
+        @followed_user = User.find_by_id(params[:followed_user_id])
+
+        return response_not_found unless @followed_user
       end
     end
   end
