@@ -25,4 +25,12 @@ class FollowTest < ActiveSupport::TestCase
     should validate_presence_of(:followee_id)
     should validate_uniqueness_of(:follower_id).scoped_to(:followee_id)
   end
+
+  test 'allow user to be followed' do
+    assert Follow.new(follower: users.first, followed_user: users.last).valid?
+  end
+
+  test 'restrict yourself to be followed' do
+    refute Follow.new(follower: users.first, followed_user: users.first).valid?
+  end
 end
