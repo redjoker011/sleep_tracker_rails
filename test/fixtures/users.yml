@@ -12,8 +12,14 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
+follower: {
+  id: 1,
+  name: 'Follower'
+}
 # column: value
 #
-two: {}
+followee: {
+  id: 2,
+  name: 'Followee'
+}
 # column: value
