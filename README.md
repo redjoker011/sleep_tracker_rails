@@ -27,6 +27,39 @@
       > rails db:migrate
       > rails db:seed
     ```
+# Docker
+  
+  Go to repository directory `cd /goodnight-app`
+
+  Run docker build command to build the image
+
+  ```
+    > docker build .
+  ```
+
+
+  Run the command using docker compose to start the application
+  
+  ```
+    > docker compose up
+  ```
+
+  Check the container name
+
+  ```
+    > docker ps
+  ```
+
+  Access the container and setup database(for fresh install only)
+
+  ```
+  > exec -it goodnight_app-web-1 bash
+  > rails db:create
+  > rails db:migrate
+  > rails db:seed
+  ```
+
+  You can access the application at `http://localhost:3000`
 
 ## API
 
@@ -67,3 +100,6 @@ Log sleep session
   - 400 -> Validation Error e.g User already followed
   - 404 -> User or Followed User not found
 
+## Test
+
+Run command `rails test`
