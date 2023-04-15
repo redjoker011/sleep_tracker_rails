@@ -54,4 +54,9 @@ class User < ApplicationRecord
   def follow!(followee)
     given_follows.create!(follower_id: id, followee_id: followee.id)
   end
+
+  # Unfollow a User
+  def unfollow!(followee)
+    given_follows.find_by(followee_id: followee.id)&.destroy!
+  end
 end
