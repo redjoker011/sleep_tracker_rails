@@ -23,6 +23,7 @@ class SleepLog < ApplicationRecord
 
   belongs_to :user
 
+  scope :over_past_week, -> { where(created_at: DateTime.now..(DateTime.now - 7.days)) }
   scope :order_by_sleep, -> { order(sleep_time: :desc) }
   scope :order_by_created_at, -> { order(created_at: :desc) }
 

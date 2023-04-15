@@ -43,6 +43,7 @@ module Api
 
         sleep_logs = @followed_user
                      .sleep_logs
+                     .over_past_week
                      .order_by_sleep
                      .map { |log| format_sleep_log(log) }
         render json: sleep_logs
