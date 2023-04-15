@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     get '/:id/followed-users', to: 'users#followed_users'
 
     post '/follow-user', to: 'users#follow_user'
+    delete '/unfollow-user', to: 'users#unfollow_user'
     post '/log-session', to: 'users#log_session'
   end
 end

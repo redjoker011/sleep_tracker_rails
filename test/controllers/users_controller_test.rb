@@ -74,6 +74,30 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     assert_response(400)
   end
 
+  test '/unfollow-user successfully follow a user' do
+    follower = User.first
+    followee = User.last
+    # Follow User
+    follower.follow!(followee)
+
+    delete '/api/v1/users/unfollow-user', params: { id: follower.id, followed_user_id: followee.id }
+    assert_response :success
+  end
+
+  test '/unfollow-user raise 404 error when user does not exists' do
+    followee = User.last
+
+    delete '/api/v1/users/unfollow-user', params: { id: 999, followed_user_id: followee.id }
+    assert_response(404)
+  end
+
+  test '/unfollow-user raise 404 error when followed user does not exists' do
+    follower = User.first
+
+    delete '/api/v1/users/unfollow-user', params: { id: follower.id, followed_user_id: 999 }
+    assert_response(404)
+  end
+
   test '/log-session successfully log sleep session' do
     user = User.first
 

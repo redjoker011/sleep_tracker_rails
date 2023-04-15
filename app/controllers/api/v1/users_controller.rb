@@ -7,7 +7,7 @@ module Api
     # User API Controller
     class UsersController < ActionController::API
       before_action :initialize_user, except: :index
-      before_action :initialize_followed_user, only: %i[follow_user sleep_sessions]
+      before_action :initialize_followed_user, only: %i[follow_user unfollow_user sleep_sessions]
 
       # Fetch Users
       # GET /api/v1/users
@@ -56,6 +56,14 @@ module Api
         render json: @user.followings
       rescue ActiveRecord::RecordInvalid
         render json: { error: 'User already being followed'.to_json }, status: 400
+      end
+
+      # Unfollow a User
+      # DELETE /api/v1/users/unfollow-user
+      def unfollow_user
+        @user.unfollow!(@followed_user)
+
+        render json: @user.followings
       end
 
       private
