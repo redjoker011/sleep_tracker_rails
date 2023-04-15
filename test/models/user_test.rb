@@ -20,4 +20,25 @@ class UserTest < ActiveSupport::TestCase
     should validate_presence_of(:name)
     should validate_uniqueness_of(:name)
   end
+
+  test 'follow another user' do
+    follower = User.first
+    followee = User.last
+    # Follow User
+    follower.follow!(followee)
+    
+    assert follower.followed?(followee)
+  end
+
+  test 'unfollow a followed user' do
+    follower = User.first
+    followee = User.last
+    # Follow User
+    follower.follow!(followee)
+
+    # Unfollow User
+    follower.unfollow!(followee)
+    
+    refute follower.followed?(followee)
+  end
 end
