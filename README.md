@@ -89,6 +89,13 @@ Follow a User
 - id -> User ID
 - followed_user_id -> ID of the User that you want to follow
 
+#### DELETE /api/v1/users/unfollow-user
+##### Description
+Unfollow a User
+##### Parameters
+- id -> User ID
+- followed_user_id -> ID of the User that you want to follow
+
 #### POST /api/v1/users/log-session
 ##### Description
 Log sleep session
