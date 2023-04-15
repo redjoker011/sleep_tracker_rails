@@ -67,41 +67,41 @@
 
 #### GET /api/v1/users
 ##### Description
-Fetch Users
-
+    Fetch Users
+----------------------------------------------------------------------
 #### GET /api/v1/users/:id/followed-users/:followed_user_id/sleep_sessions
 ##### Description
-View Followed User's sleep logs
+    View Followed User's sleep logs
 ##### Parameters
 - id -> User ID
 - followed_user_id -> ID of followed User that you want to view sleep logs
-
+----------------------------------------------------------------------
 #### GET /api/v1/users/:id/followed-users
 ##### Description
-Fetch Followed Users
+    Fetch Followed Users
 ##### Parameters
 - id -> User ID
-
+----------------------------------------------------------------------
 #### POST /api/v1/users/follow-user
 ##### Description
-Follow a User
+    Follow a User
 ##### Parameters
 - id -> User ID
 - followed_user_id -> ID of the User that you want to follow
-
+----------------------------------------------------------------------
 #### DELETE /api/v1/users/unfollow-user
 ##### Description
-Unfollow a User
+    Unfollow a User
 ##### Parameters
 - id -> User ID
 - followed_user_id -> ID of the User that you want to follow
-
+----------------------------------------------------------------------
 #### POST /api/v1/users/log-session
 ##### Description
-Log sleep session
+    Log sleep session
 ##### Parameters
 - id -> User ID
-
+----------------------------------------------------------------------
 ### Responses
   - 200 -> Success Request
   - 400 -> Validation Error e.g User already followed
